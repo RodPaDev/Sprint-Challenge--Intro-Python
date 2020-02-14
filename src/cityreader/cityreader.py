@@ -10,7 +10,7 @@ class City:
         self.lon = lon
 
     def __str__(self):
-        return f"city: {self.name}, lat: {self.lat}, lon:{self.lon}"
+        return f"{self.name}, lat: {self.lat}, lon:{self.lon}"
 
 
 # We have a collection of US cities with population over 750,000 stored in the
@@ -26,22 +26,17 @@ class City:
 # Note that the first line of the CSV is header that describes the fields--this
 # should not be loaded into a City object.
 cities = []
-path = f'{Path.cwd()}\\cities.csv'
-file = open(path, 'r')
-
-csvFile = csv.DictReader(file)
-
-print(csvFile)
+file_path = f'{Path.cwd()}\\cities.csv'
 
 def cityreader(cities=[]):
     # TODO Implement the functionality to read from the 'cities.csv' file
     # For each city record, create a new City instance and add it to the
     # `cities` list
-    for row in csvFile:
-      # the reason I don't seperate this values into variables to make it more readable
-      # is that for each time this loop runs a new instantation of this variables
-      # gets set to memory, so basically I would be allocating space in memory for the variables * loop time
-      cities.append(City(row['city'], float(row['lat']), float(row['lng'])))
+    with open(file_path) as file:
+      csvFile = csv.DictReader(file)
+      for row in csvFile:
+          cities.append(City(row['city'], float(row['lat']), float(row['lng'])))
+
     return cities
 
 
@@ -50,6 +45,11 @@ cityreader(cities)
 # Print the list of cities (name, lat, lon), 1 record per line.
 for c in cities:
     print(c)
+
+print("\n===============================")
+print("============STRETCH============")
+print("===============================\n")
+
 
 # STRETCH GOAL!
 #
@@ -91,4 +91,36 @@ def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
     # Go through each city and check to see if it falls within
     # the specified coordinates.
 
+    big_lat = 0
+    small_lat = 0
+    big_lon = 0
+    small_lon = 0
+
+    # This series of if statements make sure that the interval comparison works by having the smalles lat& lon decided
+    if float(lat1) > float(lat2):
+        big_lat = float(lat1)
+        small_lat = float(lat2)
+    else:
+        big_lat = float(lat2)
+        small_lat = float(lat1)
+
+    if float(lon1) > float(lon2):
+        big_lon = float(lon1)
+        small_lon = float(lon2)
+    else:
+        big_lon = float(lon2)
+        small_lon = float(lon1)
+
+    for city in cities:
+        # I could've used in range(small_lat, big_lat, however range is x10 slower)
+        # this is called interval comparison where the min is compared to the number to be compared and then to the max
+        if (small_lat <= city.lat <= big_lat) and (small_lon <= city.lon <= big_lon):
+            within.append(City(city.name, city.lat, city.lon))
+
     return within
+
+
+cityreader_stretch(45, -100, 32, -120, cities)
+
+for c in cityreader_stretch(45, -100, 32, -120, cities):
+    print(c)
