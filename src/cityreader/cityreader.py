@@ -119,8 +119,12 @@ def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
 
     return within
 
+print("Search cities within: ")
+ui_lat1 = input("lattitude: ")
+ui_lon1 = input("longitude: ")
+print("and within: ")
+ui_lat2 = input("lattitude: ")
+ui_lon2 = input("longitude: ")
 
-cityreader_stretch(45, -100, 32, -120, cities)
-
-for c in cityreader_stretch(45, -100, 32, -120, cities):
+for c in cityreader_stretch(ui_lat1, ui_lon1, ui_lat2, ui_lon2, cities):
     print(c)
